@@ -55,4 +55,5 @@ private:
 	DelayParameters& _params;
 	typedef std::unique_ptr<DelayComponent> pDelayComponent;
 	std::vector<pDelayComponent> dDelayComponent;
+	bool _processor_ready = false;
 };

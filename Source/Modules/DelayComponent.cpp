@@ -61,18 +61,21 @@ void DelayComponent::writeInEffectSignal(float& audioBuffer) {
 DelayProcessor::DelayProcessor(DelayParameters& params)
 	:_params(params)
 {
-	dDelayComponent.reserve(2);
 	for (int n = 0; n < 2; n++) {
-		dDelayComponent[n] = pDelayComponent(new DelayComponent(n));
+		dDelayComponent.push_back(pDelayComponent(new DelayComponent(n)));
 	}
+	_processor_ready = true;
 }
 
 DelayProcessor::~DelayProcessor()
 {}
 
 void DelayProcessor::doProcessing(int channel, float& audioBuffer) {
-	_params.setSamplingRate();
-	dDelayComponent[channel]->setParams(_params);
-	dDelayComponent[channel]->writeInDelayBuffer(audioBuffer);
-	dDelayComponent[channel]->writeInEffectSignal(audioBuffer);
+	if(_processor_ready)
+	{
+		_params.setSamplingRate();
+		dDelayComponent[channel]->setParams(_params);
+		dDelayComponent[channel]->writeInDelayBuffer(audioBuffer);
+		dDelayComponent[channel]->writeInEffectSignal(audioBuffer);
+	}
 }
